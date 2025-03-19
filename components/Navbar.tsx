@@ -8,10 +8,10 @@ export async function Navbar() {
   const locationName = cookieGfLoc ? JSON.parse(cookieGfLoc).name : "Jakarta";
   return (
     <nav className="bg-white border-gray-200 border-b h-28 md:h-20 w-full fixed left-0 top-0 z-30">
-      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 h-28 md:h-20">
+      <div className="max-w-screen-xl flex flex-wrap items-center justify-center md:justify-between mx-auto p-4 h-28 md:h-20">
         <a
           href={process.env.NEXT_PUBLIC_SITE_URL}
-          className="flex items-center space-x-3 rtl:space-x-reverse"
+          className="flex items-center space-x-3"
         >
           <div className="flex items-center justify-center gap-4">
             <Image
