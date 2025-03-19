@@ -94,6 +94,16 @@ export default function Outlets({ data }: OutletsProps) {
       .catch(() => setLoading(false));
   }, [keyword]);
 
+  if (!Array.isArray(searchMerchants)) {
+    return (
+      <div className="flex justify-center mt-4">
+        <p className="text-lg font-bold">
+          An error occurred while fetching outlets.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="mt-8">
       <div className="w-full group relative flex items-stretch overflow-hidden rounded-full border border-gray-300 transition-colors duration-200 ease-in-out focus-within:ring-2 focus-within:ring-emerald-600 focus-within:border-emerald-600">
@@ -129,7 +139,7 @@ export default function Outlets({ data }: OutletsProps) {
         )}
       </div>
 
-      {loading ? (
+      {loading && Array.isArray(searchMerchants) ? (
         <div className="flex justify-center mt-4">
           <p className="text-lg font-bold">Loading...</p>
         </div>

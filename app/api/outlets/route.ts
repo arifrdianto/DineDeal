@@ -29,14 +29,21 @@ type GoFoodOutlet = {
 export async function POST(request: NextRequest) {
   const body = await request.json();
   const goCookie = JSON.parse(request.cookies.get("gf_loc")?.value || "{}");
+  const defaultLocation = {
+    latitude: (goCookie.latitude || body.latitude) ?? -6.244068,
+    longitude: (goCookie.longitude || body.longitude) ?? 106.802756,
+  };
+
   try {
-    const grabFood = await fetch("https://portal.grab.com/foodweb/v2/search", {
+    let grabFood = [];
+
+    grabFood = await fetch("https://portal.grab.com/foodweb/v2/search", {
       method: "POST",
       headers: {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        latlng: `${goCookie.latitude},${goCookie.longitude}`,
+        latlng: `${defaultLocation.latitude},${defaultLocation.longitude}`,
         offset: 0,
         pageSize: 16,
         countryCode: "ID",
@@ -63,12 +70,10 @@ export async function POST(request: NextRequest) {
       )
       .catch(() => []);
 
-    let goFood;
+    let goFood = [];
 
     const goFoodLocation = {
       name: goCookie.name || "Pasaraya Blok M",
-      latitude: goCookie.latitude || -6.244068609,
-      longitude: goCookie.longitude || 106.80275664,
       serviceAreaId: goCookie.serviceAreaId || "1",
       serviceArea: goCookie.serviceArea || "jakarta",
       locality: goCookie.locality || "jakarta-selatan",
@@ -76,6 +81,7 @@ export async function POST(request: NextRequest) {
       address:
         goCookie.address ||
         "Jl. Sultan Iskandarsyah II, No.I, Kebayoran Baru, RT.3/RW.1, Melawai",
+      ...defaultLocation,
       ...body,
     };
 
@@ -156,7 +162,7 @@ export async function POST(request: NextRequest) {
         });
     }
 
-    const combinedData = [...grabFood, ...goFood];
+    const combinedData = [...(grabFood || []), ...goFood];
     const sortedData = sortRestaurantsByKeyword(combinedData, body.keyword);
 
     return Response.json(sortedData);

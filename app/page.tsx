@@ -11,7 +11,6 @@ export default async function Home(props: {
 
   const body = {
     keyword: searchParams?.q || "",
-    latlng: `${cookieGfLoc.latitude},${cookieGfLoc.longitude}`,
     ...cookieGfLoc,
   };
 
