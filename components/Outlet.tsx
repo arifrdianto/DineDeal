@@ -11,19 +11,39 @@ export default function OutletDetail({
   selectedItems: [Outlet | null, Outlet | null];
   onClick?: (outlet: Outlet) => void;
 }) {
+  const isSelected = selectedItems.some(
+    (selected) => selected?.id === merchant.id
+  );
+
+  const isSameProvider = selectedItems.some(
+    (selected) => selected?.provider === merchant.provider
+  );
+
+  const handleClik = () => {
+    if (isSameProvider && !isSelected) return;
+
+    if (onClick) {
+      onClick(merchant);
+    }
+  };
+
   return (
     <div
-      onClick={() => onClick && onClick(merchant)}
-      className="relative border border-gray-300 hover:border-emerald-600 transition-all duration-300 ease-in-out rounded-xl hover:md:shadow-xl"
+      onClick={handleClik}
+      className={`relative border border-gray-300 hover:border-emerald-600 transition-all duration-300 ease-in-out rounded-xl hover:md:shadow-xl ${
+        isSameProvider && !isSelected ? "cursor-not-allowed" : "cursor-pointer "
+      }`}
     >
-      {selectedItems.some((selected) => selected?.id === merchant.id) && (
-        <div className="bg-gray-400 opacity-60 cursor-pointer flex absolute items-center justify-center top-0 left-0 w-full h-full rounded-xl z-20">
-          <div className="flex items-center justify-center h-24 w-24 rounded-full bg-gray-600 text-white">
-            <span className="text-xl font-medium">Selected</span>
-          </div>
+      {(isSelected || isSameProvider) && (
+        <div className="bg-gray-400 opacity-60 flex absolute items-center justify-center top-0 left-0 w-full h-full rounded-xl z-20">
+          {isSelected && (
+            <div className="flex items-center justify-center h-24 w-24 rounded-full bg-gray-600 text-white">
+              <span className="text-xl font-medium">Selected</span>
+            </div>
+          )}
         </div>
       )}
-      <div className="bg-white rounded-2xl flex cursor-pointer p-2 lg:h-auto lg:w-full lg:flex-col md:min-h-[168px] md:!rounded-2xl md:p-1.5 relative after:absolute after:left-0 after:bottom-0 after:block after:w-full after:h-px after:bg-background-border-secondary md:after:hidden last-of-type:after:hidden">
+      <div className="bg-white rounded-2xl flex p-2 lg:h-auto lg:w-full lg:flex-col md:min-h-[168px] md:!rounded-2xl md:p-1.5 relative after:absolute after:left-0 after:bottom-0 after:block after:w-full after:h-px after:bg-background-border-secondary md:after:hidden last-of-type:after:hidden">
         <div
           className={`bg-gradient-to-r flex h-[26px] w-max items-center whitespace-nowrap px-3 py-1 text-xs rounded-r-3xl rounded-tl-3xl ${
             merchant.provider.toUpperCase() === "GRABFOOD"
