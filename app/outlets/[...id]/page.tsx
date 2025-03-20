@@ -1,3 +1,4 @@
+import { Menu } from "@/app/types/outlet";
 import { formatThousandSeparator } from "@/utils/string";
 import { Star } from "lucide-react";
 import Image from "next/image";
@@ -47,7 +48,7 @@ export default async function Page({
         </div>
       </div>
       <div className="grid grid-cols-2 gap-4 mt-8">
-        {data.menus.map((menu) => (
+        {data.menus.map((menu: Menu) => (
           <div key={menu.provider}>
             <div className="overflow-x-auto bg-gray-100 py-2 px-3">
               <div className="flex h-8 space-x-4 items-center [&_div]:border-r-gray-300 [&_>_div]:border-r [&_>_div:last-child]:border-none">

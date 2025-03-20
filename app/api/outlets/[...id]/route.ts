@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ id: string[] }> }
@@ -48,22 +49,26 @@ export async function GET(
               "https://food.grab.com/static/images/logo-grabfood2.svg",
             rating: grabData.merchant.rating,
             priceLevel: grabData.merchant.priceTag,
-            categories: grabData.merchant.menu.categories.map((category) => ({
-              id: category.id,
-              name: category.name,
-              products: category.items.map((product) => ({
-                id: product.id,
-                name: product.name,
-                description: product.description,
-                imgSrc: product.imgHref,
-                price: Number(product.priceInMinorUnit.toString().slice(0, -2)),
-                priceDiscounted: Number(
-                  product.discountedPriceInMin.toString().slice(0, -2)
-                ),
-                isPromo:
-                  product.priceInMinorUnit !== product.discountedPriceInMin,
-              })),
-            })),
+            categories: grabData.merchant.menu.categories.map(
+              (category: any) => ({
+                id: category.id,
+                name: category.name,
+                products: category.items.map((product: any) => ({
+                  id: product.id,
+                  name: product.name,
+                  description: product.description,
+                  imgSrc: product.imgHref,
+                  price: Number(
+                    product.priceInMinorUnit.toString().slice(0, -2)
+                  ),
+                  priceDiscounted: Number(
+                    product.discountedPriceInMin.toString().slice(0, -2)
+                  ),
+                  isPromo:
+                    product.priceInMinorUnit !== product.discountedPriceInMin,
+                })),
+              })
+            ),
           },
           {
             provider: "GoFood",
@@ -72,10 +77,10 @@ export async function GET(
             rating: goData.pageProps.outlet.ratings.average,
             priceLevel: goData.pageProps.outlet.priceLevel,
             categories: goData.pageProps.outlet.catalog.sections
-              .map((category) => ({
+              .map((category: any) => ({
                 id: category.uid,
                 name: category.displayName,
-                products: category.items.map((product) => ({
+                products: category.items.map((product: any) => ({
                   id: product.uid,
                   name: product.displayName,
                   description: product.description,
@@ -87,7 +92,7 @@ export async function GET(
                   isPromo: !!product.promotion,
                 })),
               }))
-              .filter((category) => category.products.length > 0),
+              .filter((category: any) => category.products.length > 0),
           },
         ],
       }),
