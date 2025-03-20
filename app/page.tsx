@@ -5,7 +5,7 @@ import { MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function Home() {
+export default function Page() {
   const router = useRouter();
   const [coordinate, setCoordinate] = useState({ lat: 0, long: 0 });
   const [location, setLocation] = useState({ name: "" });

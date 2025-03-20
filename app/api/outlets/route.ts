@@ -19,8 +19,8 @@ type GoFoodOutlet = {
     displayName: string;
     tags: { displayName: string }[];
   };
+  path: string;
   media: { coverImgUrl: string };
-
   ratings: { average: number };
   delivery: { distanceKm: number };
   priceLevel: number;
@@ -111,6 +111,7 @@ export async function POST(request: NextRequest) {
               .join(", "),
             rating: item.ratings.average,
             distance: item.delivery.distanceKm,
+            path: item.path,
             priceTag: item.priceLevel,
             provider: "GoFood",
             providerImageSrc:
@@ -151,6 +152,7 @@ export async function POST(request: NextRequest) {
             rating: item.ratings.average,
             distance: item.delivery.distanceKm,
             priceTag: item.priceLevel,
+            path: item.path,
             provider: "GoFood",
             providerImageSrc:
               "https://i.gojekapi.com/darkroom/gofood-id/v2/images/uploads/f9546f29-23c3-4384-adf9-03bb59a89136_gofood-logo.png?auto=format",
