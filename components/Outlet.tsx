@@ -1,22 +1,28 @@
+import { Outlet } from "@/app/types/outlet";
 import { MapPin, Star } from "lucide-react";
 import Image from "next/image";
 
-type Outlet = {
-  id: string;
-  provider: string;
-  providerImageSrc: string;
-  imageSrc: string;
-  imageSrcFallback: string;
-  name: string;
-  cuisine: string;
-  rating?: number;
-  distance: string;
-  priceTag: number;
-};
-
-export default function Outlet({ merchant }: { merchant: Outlet }) {
+export default function OutletDetail({
+  merchant,
+  onClick,
+  selectedItems = [null, null],
+}: {
+  merchant: Outlet;
+  selectedItems: [Outlet | null, Outlet | null];
+  onClick?: (outlet: Outlet) => void;
+}) {
   return (
-    <div className="border border-gray-300 hover:border-emerald-600 transition-all duration-300 ease-in-out rounded-xl hover:md:shadow-xl">
+    <div
+      onClick={() => onClick && onClick(merchant)}
+      className="relative border border-gray-300 hover:border-emerald-600 transition-all duration-300 ease-in-out rounded-xl hover:md:shadow-xl"
+    >
+      {selectedItems.some((selected) => selected?.id === merchant.id) && (
+        <div className="bg-gray-400 opacity-60 cursor-pointer flex absolute items-center justify-center top-0 left-0 w-full h-full rounded-xl z-20">
+          <div className="flex items-center justify-center h-24 w-24 rounded-full bg-gray-600 text-white">
+            <span className="text-xl font-medium">Selected</span>
+          </div>
+        </div>
+      )}
       <div className="bg-white rounded-2xl flex cursor-pointer p-2 lg:h-auto lg:w-full lg:flex-col md:min-h-[168px] md:!rounded-2xl md:p-1.5 relative after:absolute after:left-0 after:bottom-0 after:block after:w-full after:h-px after:bg-background-border-secondary md:after:hidden last-of-type:after:hidden">
         <div
           className={`bg-gradient-to-r flex h-[26px] w-max items-center whitespace-nowrap px-3 py-1 text-xs rounded-r-3xl rounded-tl-3xl ${

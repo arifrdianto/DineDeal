@@ -1,4 +1,18 @@
 export type Outlet = {
+  id: string;
+  provider: string;
+  providerImageSrc: string;
+  imageSrc: string;
+  imageSrcFallback: string;
+  name: string;
+  cuisine: string;
+  rating?: number;
+  distance: string;
+  priceTag: number;
+  path?: string;
+};
+
+export type OutletDetail = {
   name: string;
   photoHref: string;
   cuisine: string;

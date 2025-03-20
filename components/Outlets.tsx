@@ -4,20 +4,8 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { Search, X } from "lucide-react";
 import { checkGeolocationPermission } from "@/utils/geolocation";
-import Outlet from "./Outlet";
-
-type Outlet = {
-  id: string;
-  provider: string;
-  providerImageSrc: string;
-  imageSrc: string;
-  imageSrcFallback: string;
-  name: string;
-  cuisine: string;
-  rating?: number;
-  distance: string;
-  priceTag: number;
-};
+import OutletDetail from "./Outlet";
+import { Outlet } from "@/app/types/outlet";
 
 type OutletsProps = {
   data: Outlet[];
@@ -28,6 +16,10 @@ export default function Outlets({ data }: OutletsProps) {
   const pathname = usePathname();
   const router = useRouter();
   const isFirstRender = useRef(true);
+
+  const [selectedItems, setSelectedItems] = useState<
+    [Outlet | null, Outlet | null]
+  >([null, null]);
 
   const [input, setInput] = useState(searchParams.get("q") || "");
   const [keyword, setKeyword] = useState("");
@@ -103,15 +95,52 @@ export default function Outlets({ data }: OutletsProps) {
       .catch(() => setLoading(false));
   }, [keyword]);
 
-  if (!Array.isArray(searchMerchants)) {
-    return (
-      <div className="flex justify-center mt-4">
-        <p className="text-lg font-bold">
-          An error occurred while fetching outlets.
-        </p>
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (!Array.isArray(searchMerchants)) {
+      console.error("An error occurred while fetching outlets.");
+    }
+  }, [searchMerchants]);
+
+  const handleClickOutlet = (item: Outlet) => {
+    setSelectedItems((prevSelected) => {
+      if (!prevSelected) return [item, null];
+      const isSelected = prevSelected.some(
+        (selected) => selected?.id === item.id
+      );
+      if (isSelected) {
+        return prevSelected.map((selected) =>
+          selected?.id === item.id ? null : selected
+        ) as [Outlet | null, Outlet | null];
+      }
+      const emptyIndex = prevSelected.findIndex(
+        (selected) => selected === null
+      );
+      if (emptyIndex !== -1) {
+        const newSelected = [...prevSelected];
+        newSelected[emptyIndex] = item;
+        return newSelected as [Outlet | null, Outlet | null];
+      }
+      return prevSelected;
+    });
+  };
+
+  useEffect(() => {
+    if (selectedItems[0] && selectedItems[1]) {
+      let grabId, goId;
+
+      if (selectedItems[0].provider === "GrabFood") {
+        grabId = selectedItems[0].id;
+        goId = selectedItems[1].path?.split("/");
+      } else {
+        grabId = selectedItems[1].id;
+        goId = selectedItems[0].path?.split("/");
+      }
+
+      router.push(`outlets/${goId?.[2]}/${goId?.[4]}/${grabId}`, {
+        scroll: false,
+      });
+    }
+  }, [router, selectedItems]);
 
   return (
     <div className="mt-8">
@@ -155,7 +184,12 @@ export default function Outlets({ data }: OutletsProps) {
       ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-4 lg:gap-6 mt-6 md:mt-10 mb-8 mx-0">
           {searchMerchants.map((merchant) => (
-            <Outlet key={merchant.id} merchant={merchant} />
+            <OutletDetail
+              key={merchant.id}
+              merchant={merchant}
+              onClick={handleClickOutlet}
+              selectedItems={selectedItems}
+            />
           ))}
         </div>
       )}
