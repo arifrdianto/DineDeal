@@ -64,8 +64,7 @@ export async function POST(request: NextRequest) {
             Math.round(item.merchantBrief.distanceInKm * 10) / 10 + " km",
           priceTag: item.merchantBrief.priceTag,
           provider: "GrabFood",
-          providerImageSrc:
-            "https://food.grab.com/static/images/logo-grabfood2.svg",
+          providerImageSrc: `${process.env.NEXT_PUBLIC_SITE_URL}/logo-grabfood.svg`,
         }))
       )
       .catch(() => []);
@@ -114,8 +113,7 @@ export async function POST(request: NextRequest) {
             path: item.path,
             priceTag: item.priceLevel,
             provider: "GoFood",
-            providerImageSrc:
-              "https://i.gojekapi.com/darkroom/gofood-id/v2/images/uploads/f9546f29-23c3-4384-adf9-03bb59a89136_gofood-logo.png?auto=format",
+            providerImageSrc: `${process.env.NEXT_PUBLIC_SITE_URL}/logo-gofood.png`,
           }))
         )
         .catch(() => []);
@@ -152,14 +150,19 @@ export async function POST(request: NextRequest) {
             rating: item.ratings.average,
             distance: item.delivery.distanceKm,
             priceTag: item.priceLevel,
-            path: item.path,
+            path:
+              item.path ||
+              `/en/${
+                goFoodLocation.serviceArea
+              }/restaurant/${item.core.displayName
+                .replace(/[^a-zA-Z0-9 ]/g, "")
+                .replace(/\s+/g, "-")
+                .toLowerCase()}-${item.core.uid}`,
             provider: "GoFood",
-            providerImageSrc:
-              "https://i.gojekapi.com/darkroom/gofood-id/v2/images/uploads/f9546f29-23c3-4384-adf9-03bb59a89136_gofood-logo.png?auto=format",
+            providerImageSrc: `${process.env.NEXT_PUBLIC_SITE_URL}/logo-gofood.png`,
           }))
         )
-        .catch((e) => {
-          console.error(e);
+        .catch(() => {
           return [];
         });
     }

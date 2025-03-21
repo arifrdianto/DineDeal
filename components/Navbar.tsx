@@ -15,14 +15,14 @@ export async function Navbar() {
         >
           <div className="flex items-center justify-center gap-4">
             <Image
-              src="https://food.grab.com/static/images/logo-grabfood2.svg"
+              src={`${process.env.NEXT_PUBLIC_SITE_URL}/logo-grabfood.svg`}
               alt="GrabFood"
               width={120}
               height={120}
             />
             ⚔️
             <Image
-              src="https://i.gojekapi.com/darkroom/gofood-id/v2/images/uploads/f9546f29-23c3-4384-adf9-03bb59a89136_gofood-logo.png?auto=format"
+              src={`${process.env.NEXT_PUBLIC_SITE_URL}/logo-gofood.png`}
               alt="GoFood"
               width={120}
               height={120}

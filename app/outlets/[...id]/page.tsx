@@ -17,7 +17,15 @@ export default async function Page({
 
   const data = await fetch(
     `${process.env.NEXT_PUBLIC_SITE_URL}/api/outlets/${grabId}/en/${area}/restaurant/${goId}`
-  ).then((res) => res.json());
+  )
+    .then((res) => res.json())
+    .catch(() => {
+      return redirect("/outlets");
+    });
+
+  if (data.error || !data.name) {
+    return redirect("/outlets");
+  }
 
   return (
     <div className="pt-8">

@@ -2,11 +2,10 @@
 
 import { checkGeolocationPermission } from "@/utils/geolocation";
 import { MapPin } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Page() {
-  const router = useRouter();
   const [coordinate, setCoordinate] = useState({ lat: 0, long: 0 });
   const [location, setLocation] = useState({ name: "" });
 
@@ -72,7 +71,7 @@ export default function Page() {
                 </div>
               </div>
               <button
-                onClick={() => router.push("/outlets")}
+                onClick={() => redirect("/outlets")}
                 className="bg-emerald-600 text-white font-semibold px-4 py-2 rounded-lg w-full max-w-[411px] justify-center md:w-max md:max-w-none hover:bg-emerald-700 "
               >
                 Lanjut

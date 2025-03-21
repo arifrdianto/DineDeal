@@ -1,6 +1,11 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import {
+  redirect,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { Search, X } from "lucide-react";
 import { checkGeolocationPermission } from "@/utils/geolocation";
@@ -70,7 +75,8 @@ export default function Outlets({ data }: OutletsProps) {
         newParams.delete("q");
       }
 
-      router.push(`${pathname}?${newParams.toString()}`, { scroll: false }); // Update URL tanpa reload
+      router.push(`${pathname}?${newParams.toString()}`, { scroll: false });
+      setSelectedItems([null, null]);
     }
   };
 
@@ -136,11 +142,14 @@ export default function Outlets({ data }: OutletsProps) {
         goId = selectedItems[0].path?.split("/");
       }
 
-      router.push(`outlets/${goId?.[2]}/${goId?.[4]}/${grabId}`, {
-        scroll: false,
-      });
+      if (!goId) {
+        console.error("Invalid path", goId);
+        return;
+      }
+
+      redirect(`outlets/${goId?.[2]}/${goId?.[4]}/${grabId}`);
     }
-  }, [router, selectedItems]);
+  }, [selectedItems]);
 
   return (
     <div className="mt-8">

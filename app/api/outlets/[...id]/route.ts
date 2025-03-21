@@ -18,7 +18,10 @@ export async function GET(
       `https://portal.grab.com/foodweb/v2/merchants/${grabId}`
     )
       .then((res) => res.json())
-      .then((data) => data);
+      .then((data) => data)
+      .catch(() => {
+        throw new Error("Failed to fetch data from GrabFood");
+      });
 
     const path = goId.join("/");
 
@@ -32,7 +35,10 @@ export async function GET(
       }
     )
       .then((res) => res.json())
-      .then((data) => data);
+      .then((data) => data)
+      .catch(() => {
+        throw new Error("Failed to fetch data from GoFood");
+      });
 
     return new Response(
       JSON.stringify({
@@ -45,8 +51,7 @@ export async function GET(
         menus: [
           {
             provider: "GrabFood",
-            providerImageSrc:
-              "https://food.grab.com/static/images/logo-grabfood2.svg",
+            providerImageSrc: `${process.env.NEXT_PUBLIC_SITE_URL}/logo-grabfood.svg`,
             rating: grabData.merchant.rating,
             priceLevel: grabData.merchant.priceTag,
             categories: grabData.merchant.menu.categories.map(
@@ -72,8 +77,7 @@ export async function GET(
           },
           {
             provider: "GoFood",
-            providerImageSrc:
-              "https://i.gojekapi.com/darkroom/gofood-id/v2/images/uploads/f9546f29-23c3-4384-adf9-03bb59a89136_gofood-logo.png",
+            providerImageSrc: `${process.env.NEXT_PUBLIC_SITE_URL}/logo-gofood.png`,
             rating: goData.pageProps.outlet.ratings.average,
             priceLevel: goData.pageProps.outlet.priceLevel,
             categories: goData.pageProps.outlet.catalog.sections
@@ -104,9 +108,24 @@ export async function GET(
     );
   } catch (error) {
     if (error instanceof Error) {
-      return new Response(error.message, { status: 500 });
+      return new Response(JSON.stringify({ error: error.message }), {
+        status: 500,
+        headers: {
+          "content-type": "application/json",
+        },
+      });
     }
 
-    return new Response("An error occurred", { status: 500 });
+    return new Response(
+      JSON.stringify({
+        error: "An error occurred",
+      }),
+      {
+        status: 500,
+        headers: {
+          "content-type": "application/json",
+        },
+      }
+    );
   }
 }
