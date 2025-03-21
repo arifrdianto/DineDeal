@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       { protocol: "http", hostname: "localhost" },
+      { protocol: "https", hostname: "*.vercel.app" },
       { protocol: "https", hostname: "*.grab.com" },
       { protocol: "https", hostname: "*.gojekapi.com" },
     ],
