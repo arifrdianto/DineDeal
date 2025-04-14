@@ -104,7 +104,18 @@ export default function Products({ data }: { data: { menus: Menu[] } }) {
                           key={product.id + "-" + j}
                           className="border border-gray-300 p-3 rounded-xl"
                         >
-                          <div className="flex w-full items-stretch justify-between">
+                          <div className="flex flex-col w-full sm:flex-row sm:items-stretch sm:justify-between gap-3">
+                            <div className="relative w-full h-[180px] sm:order-1 sm:h-[100px] sm:w-[100px] lg:h-[120px] lg:w-[120px]">
+                              <Image
+                                className="h-full w-full rounded-xl object-cover"
+                                src={
+                                  product.imgSrc || "/illustration-image.webp"
+                                }
+                                alt={product.name}
+                                width={120}
+                                height={120}
+                              />
+                            </div>
                             <div className="mt-1 ml-1 mr-4 flex w-full flex-col">
                               <h3 className="line-clamp-2 font-semibold mb-1">
                                 {product.name}
@@ -129,15 +140,6 @@ export default function Products({ data }: { data: { menus: Menu[] } }) {
                                   </span>
                                 )}
                               </div>
-                            </div>
-                            <div className="relative h-[112px] w-[112px] flex-shrink-0 lg:h-[120px] lg:w-[120px]">
-                              <Image
-                                className="h-full w-full rounded-xl object-cover"
-                                src={product.imgSrc}
-                                alt={product.name}
-                                width={120}
-                                height={120}
-                              />
                             </div>
                           </div>
                         </div>
